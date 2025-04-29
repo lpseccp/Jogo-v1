@@ -1,33 +1,39 @@
 body {
   margin: 0;
   overflow: hidden;
-  background-color: #000;
+  background-color: black;
 }
 
 canvas {
+  background-color: black;
   display: block;
   margin: 0 auto;
-  background-color: #111;
 }
 
 #joystickContainer {
   position: absolute;
-  bottom: 40px;
-  left: 40px;
-  width: 120px;
-  height: 120px;
-  background-color: rgba(255,255,255,0.05);
-  border-radius: 50%;
-  touch-action: none;
+  bottom: 20px;
+  left: 20px;
+  width: 100px;
+  height: 100px;
 }
 
 #joystick {
+  width: 100px;
+  height: 100px;
+  background-color: rgba(255,255,255,0.1);
+  border-radius: 50%;
+}
+
+#actionButton {
   position: absolute;
+  bottom: 30px;
+  right: 30px;
   width: 60px;
   height: 60px;
-  background-color: rgba(255,255,255,0.2);
   border-radius: 50%;
-  top: 30px;
-  left: 30px;
-  touch-action: none;
+  background-color: red;
+  color: white;
+  font-size: 18px;
+  border: none;
 }

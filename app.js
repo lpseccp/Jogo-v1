@@ -10,20 +10,28 @@ let player = {
 };
 
 const walls = [
-  { x: 150, y: 0, w: 10, h: 600 }, // parede esquerda
-  { x: 240, y: 0, w: 10, h: 600 }, // parede direita
-  { x: 60, y: 350, w: 90, h: 10 }, // sala esquerda topo
-  { x: 60, y: 350, w: 10, h: 90 }, // esquerda
-  { x: 60, y: 440, w: 90, h: 10 }, // base
-  { x: 240, y: 250, w: 90, h: 10 }, // sala direita topo
-  { x: 320, y: 250, w: 10, h: 90 }, // direita
-  { x: 240, y: 340, w: 90, h: 10 }  // base
+  // Corredor
+  { x: 130, y: 0, w: 10, h: 600 },
+  { x: 260, y: 0, w: 10, h: 600 },
+
+  // Sala esquerda maior
+  { x: 20, y: 300, w: 110, h: 10 },  // topo
+  { x: 20, y: 300, w: 10, h: 120 },  // lateral esquerda
+  { x: 20, y: 420, w: 110, h: 10 },  // base
+
+  // Sala direita maior
+  { x: 270, y: 200, w: 110, h: 10 },  // topo
+  { x: 380, y: 200, w: 10, h: 120 },  // lateral direita
+  { x: 270, y: 320, w: 110, h: 10 }   // base
 ];
 
+// Portas maiores
 let doors = [
-  { x: 150, y: 370, w: 10, h: 30, opened: false }, // porta esquerda
-  { x: 240, y: 270, w: 10, h: 30, opened: false }  // porta direita
+  { x: 130, y: 340, w: 10, h: 40, opened: false }, // porta esquerda
+  { x: 260, y: 240, w: 10, h: 40, opened: false }  // porta direita
 ];
+
+let showHint = false;
 
 function drawWalls() {
   ctx.fillStyle = "#555";
@@ -72,6 +80,14 @@ function drawLanterna() {
   ctx.restore();
 }
 
+function drawHint() {
+  if (showHint) {
+    ctx.fillStyle = "white";
+    ctx.font = "18px Arial";
+    ctx.fillText("Aperte Ação para abrir a porta", 80, 50);
+  }
+}
+
 function isColliding(x, y) {
   for (let wall of walls) {
     if (
@@ -85,10 +101,10 @@ function isColliding(x, y) {
   }
   for (let door of doors) {
     if (!door.opened &&
-        x + player.size > door.x &&
-        x - player.size < door.x + door.w &&
-        y + player.size > door.y &&
-        y - player.size < door.y + door.h
+      x + player.size > door.x &&
+      x - player.size < door.x + door.w &&
+      y + player.size > door.y &&
+      y - player.size < door.y + door.h
     ) {
       return true;
     }
@@ -102,6 +118,18 @@ function update() {
 
   if (!isColliding(nextX, player.y)) player.x = nextX;
   if (!isColliding(player.x, nextY)) player.y = nextY;
+
+  // Verifica se está próximo de uma porta
+  showHint = false;
+  for (let door of doors) {
+    let dx = door.x + door.w / 2 - player.x;
+    let dy = door.y + door.h / 2 - player.y;
+    let dist = Math.sqrt(dx * dx + dy * dy);
+    if (!door.opened && dist < 50) {
+      showHint = true;
+      break;
+    }
+  }
 }
 
 function openNearbyDoor() {
@@ -109,10 +137,8 @@ function openNearbyDoor() {
     let dx = door.x + door.w / 2 - player.x;
     let dy = door.y + door.h / 2 - player.y;
     let dist = Math.sqrt(dx * dx + dy * dy);
-
-    if (dist < 40) {
+    if (dist < 50) {
       door.opened = true;
-      console.log("Porta aberta!");
     }
   }
 }
@@ -125,6 +151,7 @@ function gameLoop() {
   drawDoors();
   drawLanterna();
   drawPlayer();
+  drawHint();
   update();
   requestAnimationFrame(gameLoop);
 }

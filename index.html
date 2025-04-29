@@ -9,9 +9,12 @@
 </head>
 <body>
   <canvas id="game" width="400" height="600"></canvas>
+  
   <div id="joystickContainer">
     <div id="joystick"></div>
   </div>
+
+  <button id="actionButton">Ação</button>
 
   <script src="joystick.js"></script>
   <script src="app.js"></script>
@@ -19,28 +22,6 @@
     if ('serviceWorker' in navigator) {
       navigator.serviceWorker.register('service-worker.js');
     }
-
-    // Criação dinâmica do botão
-    const actionButton = document.createElement('button');
-    actionButton.id = 'actionButton';
-    actionButton.textContent = 'Ação';
-    actionButton.style.position = 'absolute';
-    actionButton.style.bottom = '20px';
-    actionButton.style.right = '20px';
-    actionButton.style.padding = '10px 20px';
-    actionButton.style.fontSize = '16px';
-    actionButton.style.background = '#333';
-    actionButton.style.color = '#fff';
-    actionButton.style.border = 'none';
-    actionButton.style.borderRadius = '10px';
-    actionButton.style.zIndex = '10';
-
-    actionButton.addEventListener('click', () => {
-      // Aqui você coloca o que deve acontecer quando o botão for clicado
-      console.log('Botão de ação pressionado!');
-    });
-
-    document.body.appendChild(actionButton);
   </script>
 </body>
 </html>
